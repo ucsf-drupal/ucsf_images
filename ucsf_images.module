@@ -91,7 +91,7 @@ function ucsf_images_list_view_modes(){
   $view_modes[] = 'square_quarter';
   $view_modes[] = 'square_sixth';
   $view_modes[] = 'square_thumbnail';
-  $view_modes[] = 'original';
+  $view_modes[] = 'media_original';
   $view_modes[] = 'original_cropped';
   $view_modes[] = 'raw_square';
   
@@ -141,7 +141,8 @@ function ucsf_images_file_type_alter(&$types, $file) {
 
 function ucsf_images_preprocess_file_entity(&$variables) {
   if (!empty($variables['view_mode'])){
-    $variables['classes_array'][] = drupal_html_class('file-entity-' . $variables['view_mode']);    
+    $variables['classes_array'][] = drupal_html_class('file-entity-' . $variables['view_mode']);
+    $variables['classes_array'][] = drupal_html_class('file-entity-element-container');    
   }
 }
 /*
@@ -255,9 +256,11 @@ function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
     if (isset($element['content']['#bundle']) && $element['content']['#bundle'] == 'video' && $element['content']['file']['#theme'] == 'image_style') {
         $videolink = $element['content']['file']['#file']->uri;
         if (strpos($videolink, 'youtube://v/') === 0){
+          $element['content']['#attributes']['class'][] = 'media-youtube-preview';
           $videolink = substr_replace($videolink, "http://youtu.be/",0,12);
         }
         elseif (strpos($videolink, 'vimeo://v/') === 0){
+          $element['content']['#attributes']['class'][] = 'media-vimeo-preview';
           $videolink = substr_replace($videolink, "http://vimeo.com/",0,10);
         }
 
