@@ -37,9 +37,9 @@
 .media-square-sixth,
 .media-sixth {width:16.6666666666667%;}
 
-.file-entity-element-container,
-.file-entity-square-element-container,
-.media-square-element-container,
+.file-entity-element-container img,
+.file-entity-square-element-container img,
+.media-square-element-container img,
 .media-element-container img {
   max-width: 100%;
   height: auto;
@@ -147,6 +147,14 @@ table .media-sixth {width:auto;}
 	height: 100%;
 }
 
+.view-gallery.view-display-id-gallery_landing_page .views-row {
+	max-width:50%;
+}
+
+.ucsf-images-fill-parent {
+	width: 100%;
+	height: auto;
+}
 p:empty {
 	display:none;
 }

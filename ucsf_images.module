@@ -142,36 +142,39 @@ function ucsf_images_file_type_alter(&$types, $file) {
 function ucsf_images_preprocess_file_entity(&$variables) {
   if (!empty($variables['view_mode'])){
     $variables['classes_array'][] = drupal_html_class('file-entity-' . $variables['view_mode']);
-    $variables['classes_array'][] = drupal_html_class('file-entity-element-container');    
+    $variables['classes_array'][] = drupal_html_class('file-entity-element-container');
+    
+    if(isset($variables['view_mode']) && in_array($variables['view_mode'], ucsf_images_list_view_modes() )) {
+      $max_width = ucsf_images_check_container_width($variables);
+      //check to see if the image width is less than the minimum
+      if ($max_width !== false) {
+        //if so, add a style element to the media container restricting the container width
+        $variables['attributes_array']['style'][] = 'max-width: ' . $max_width . 'px;';
+      }
+
+    }
   }
 }
-/*
-function ucsf_images_preprocess_image_style(&$variables) {
-}
-*/
-/*
-function ucsf_images_file_displays_alter($displays, $file, $view_mode) {
-}
-*/
-/*
-function ucsf_images_preprocess_image(&$variables) {
-}
-*/
 /**
- * Implements hook_media_token_to_markup_alter()
+ * helper function for checking image widths against presumed size
+ * @param $element
+ * the pre-render file element or variables array
  */
-function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $settings) {
-
-  //Set a style=max-width on the container if image is undersized
-  //makes wrapping and captions work with undersized images
-
-  //make sure we have a file to work with
-  if (isset($element['content']['file']['#file']->metadata['width'])){
-     //set the minimum width in case not otherwise known
-     $min_width = 0;
-     //grab the original image width
-     $width = $element['content']['file']['#file']->metadata['width'];
-
+function ucsf_images_check_container_width($element){
+    //case for media as a field
+    if ($info = image_get_info($element['uri'])){
+      $width = $info['width'];
+    }
+    //case for media loaded in page
+    elseif ($info = image_get_info($element['content']['file']['#file']->uri)){
+      $width = $info['width'];
+    }
+    //doesn't fit or not an image, exit.
+    else {
+      return false;
+    }
+       //set the minimum width in case not otherwise known
+     $min_width = 0; 
      //if #image_style is set (picture formatter)
      if (isset($element['content']['file']['#image_style'])) {
        //grab the size of the fallback style (picture formatter)
@@ -181,6 +184,8 @@ function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
        //otherwise try load via #style_name (image formatter)
        $style = image_style_load($element['content']['file']['#style_name']);
      }
+
+
 
      //if we were able to load a style
      if (isset($style['effects'])){
@@ -195,25 +200,49 @@ function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
              $min_width = $effect['data']['width'];
            }
          }
+         if (isset($effect['data']['reuse_crop_style'])){
+          $crop_style = $effect['data']['reuse_crop_style'];
+         }
        }      
      }
-
      //if manualcrop data exists for the image at original_cropped style
      //todo: what happends when we add squares?
-     if ($manualcrop = manualcrop_load_crop_selection($element['content']['file']['#file']->uri,'original_cropped')) {
-       //set the width to manualcrops (has to be smaller in this case)
-       $width = $manualcrop->width;
+     if (isset($crop_style) && $manualcrop = manualcrop_load_crop_selection($element['content']['file']['#file']->uri,$crop_style)) {
+       //set the width to manualcrops if smaller
+      if ($manualcrop->width < $width){
+        $width = $manualcrop->width;        
+      }
      }
 
-     //check to see if the image width is less than the minimum
      if ($width < $min_width) {
+      return $width;
+     }
+     else {
+      return FALSE;
+     }
+
+}
+
+/**
+ * Implements hook_media_token_to_markup_alter()
+ */
+function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $settings) {
+
+  //Set a style=max-width on the container if image is undersized
+  //makes wrapping and captions work with undersized images
+
+  //make sure we have a file to work with
+  if (isset($element['content']['file']['#file']->metadata['width'])){
+     //grab the original image width
+     $width = $element['content']['file']['#file']->metadata['width'];
+
+     $max_width = ucsf_images_check_container_width($element,$width);
+     //check to see if the image width is less than the minimum
+     if ($max_width !== false) {
        //if so, add a style element to the media container restricting the container width
-       $element['content']['#attributes']['style'][] = 'max-width: ' . $width . 'px;';
+       $element['content']['#attributes']['style'][] = 'max-width: ' . $max_width . 'px;';
      }
   }
-
-
-
   //if the view mode is in the ucsf_image predfined list
   if(isset($element['content']['file']['#view_mode']) && in_array($element['content']['file']['#view_mode'], ucsf_images_list_view_modes())) {
     //if the element is not already a container

@@ -1133,7 +1133,7 @@ function ucsf_images_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => '0',
+          'weight' => '1',
         ),
         'featured' => array(
           'label' => 'hidden',
@@ -1161,7 +1161,7 @@ function ucsf_images_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => '0',
+          'weight' => '1',
         ),
         'media_link' => array(
           'label' => 'above',
@@ -1325,10 +1325,9 @@ function ucsf_images_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'list',
           'settings' => array(),
-          'type' => 'list_default',
-          'weight' => '1',
+          'type' => 'hidden',
+          'weight' => '2',
         ),
         'featured' => array(
           'label' => 'above',
@@ -1346,7 +1345,7 @@ function ucsf_images_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '2',
         ),
         'preview' => array(
           'label' => 'above',

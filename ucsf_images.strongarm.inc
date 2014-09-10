@@ -313,6 +313,9 @@ function ucsf_images_strongarm() {
       'three_quarters' => array(
         'custom_settings' => TRUE,
       ),
+      'raw_square' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
@@ -333,7 +336,7 @@ function ucsf_images_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '1',
+            'weight' => '0',
             'visible' => TRUE,
           ),
           'media_original' => array(
@@ -515,6 +518,27 @@ function ucsf_images_strongarm() {
   $strongarm->name = 'media_wysiwyg_view_mode_video_wysiwyg_restricted_view_modes_status';
   $strongarm->value = 1;
   $export['media_wysiwyg_view_mode_video_wysiwyg_restricted_view_modes_status'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_file_image_pattern';
+  $strongarm->value = '';
+  $export['pathauto_file_image_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_file_pattern';
+  $strongarm->value = '';
+  $export['pathauto_file_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_file_video_pattern';
+  $strongarm->value = '';
+  $export['pathauto_file_video_pattern'] = $strongarm;
 
   return $export;
 }
