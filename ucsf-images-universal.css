@@ -176,3 +176,6 @@ table .media-sixth {width:auto;}
 p:empty {
 	display:none;
 }
+.file-entity-element-container h2.element-invisible {
+	display: none
+}
