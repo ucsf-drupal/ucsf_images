@@ -23,7 +23,7 @@ function ucsf_images_image_default_styles() {
   // Exported image style: original_cropped.
   $styles['original_cropped'] = array(
     'name' => 'original_cropped',
-    'label' => 'Standard Crop',
+    'label' => 'Custom Crop',
     'effects' => array(
       27 => array(
         'label' => 'Manual Crop: Custom crop',
