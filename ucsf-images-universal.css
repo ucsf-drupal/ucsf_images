@@ -47,9 +47,8 @@
   vertical-align: bottom;
 }
 #media-wysiwyg-format-form #preview img{
-  max-height: 50%;
   max-width:100%;
-  width:auto;
+  height:auto;
 }
 
 table .file-entity-full,
