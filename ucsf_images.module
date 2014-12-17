@@ -7,7 +7,7 @@ function ucsf_images_file_view_alter($build, $type) {
   dargs();
 }*/
 /**
- * Implements hook_ucsf_webedit_permissions_alter() 
+ * Implements hook_ucsf_webedit_permissions_alter()
  * $webedit_perm_match are strict matches to ucsf_webedit text format permissions
  * $webedit_perm_on are soft matches, grant permission only to match ucsf_webedit...
  */
@@ -22,7 +22,7 @@ function ucsf_images_ucsf_webedit_permissions_alter(&$webedit_perm_match,&$webed
  * Implementation of hook_init()
  */
 function ucsf_images_init() {
-  
+
   // Adding the images css file to the theme section so it will show up where needed
   //if you define image containers for your theme in css in a module, make sure the weight is between -10 and 0 and you load it the same way
   drupal_add_css( drupal_get_path( 'module', 'ucsf_images') . '/ucsf-images-universal.css',
@@ -41,8 +41,8 @@ function ucsf_images_entity_view_mode_info() {
   //define the standard UCSF_Images view modes
   $view_modes['file']['media_full']['label'] = 'Full';
   $view_modes['file']['half']['label'] = 'Half';
-  $view_modes['file']['original_cropped']['label'] = 'Original';
-  $view_modes['file']['media_original']['label'] = 'Raw Original';
+  $view_modes['file']['original_cropped']['label'] = 'Original Cropped';
+  $view_modes['file']['media_original']['label'] = 'Original';
   $view_modes['file']['quarter']['label'] = 'Quarter';
   $view_modes['file']['three_quarters']['label'] = 'Three Quarters';
   $view_modes['file']['sixth']['label'] = 'Sixth';
@@ -80,7 +80,7 @@ function ucsf_images_list_view_modes(){
   $view_modes[] = 'media_original';
   $view_modes[] = 'original_cropped';
   $view_modes[] = 'raw_square';
-  
+
   return $view_modes;
 }
 
@@ -107,7 +107,7 @@ function ucsf_images_preprocess_image(&$variables) {
   global $base_url;
   if (substr($variables['path'], 0, strlen($base_url)) == $base_url) {
       $variables['path'] = substr($variables['path'], strlen($base_url));
-  } 
+  }
 }
 
 /**
@@ -138,14 +138,14 @@ function ucsf_images_preprocess_picture(&$variables) {
 }
 
 /*
- * implementation of hook_preprocess_file_entity 
+ * implementation of hook_preprocess_file_entity
  */
 function ucsf_images_preprocess_file_entity(&$variables) {
   //dpm(array('ucsf_images_preprocess_file_entity' => $variables));
   if (!empty($variables['view_mode'])){
     $variables['classes_array'][] = drupal_html_class('file-entity-' . $variables['view_mode']);
     $variables['classes_array'][] = drupal_html_class('file-entity-element-container');
-    
+
     if(isset($variables['view_mode']) && in_array($variables['view_mode'], ucsf_images_list_view_modes() )) {
       $max_width = ucsf_images_check_container_width($variables);
       //check to see if the image width is less than the minimum
@@ -189,9 +189,14 @@ function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
       $element['content']['#attributes']['class'] = array(
         'media',
         'media-element-container',
-        'media-' . str_replace('_', '-',$element['content']['file']['#view_mode'])
+        drupal_html_class('media-' . $element['content']['file']['#view_mode'])
       );
-
+    }
+    else {
+      //it's already a container, clean up the class names
+      foreach ($element['content']['#attributes']['class'] as $key => $class) {
+        $element['content']['#attributes']['class'][$key] = drupal_html_class($class);
+      }
     }
   }
 
@@ -199,7 +204,7 @@ function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
   if (empty($settings['fields']['field_image_position']['und']) && !empty($settings['fields']['field_position']['und'])){
     $settings['fields']['field_image_position']['und'] = $settings['fields']['field_position']['und'];
     unset($settings['fields']['field_position']['und']);
-  } 
+  }
 
   //do the wrapping class
   if (isset($settings['fields']['field_image_position']['und'])) {
@@ -227,12 +232,9 @@ function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
           $element['content']['#attributes']['class'][] = 'media-vimeo-preview';
           $videolink = substr_replace($videolink, "http://vimeo.com/",0,10);
         }
-
-
         $element['content']['file']['#prefix']='<a href='.$videolink.' class="media-video-preview">';
         $element['content']['file']['#suffix']='</a>';
     }
-
   }
 }
 
@@ -240,7 +242,7 @@ function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
  * Implementation of hook_form_alter()
  */
 function ucsf_images_form_alter(&$form, &$form_state, $form_id) {
-  
+
   //hide the image_title_text field, as it is not ideal for accesibility, however deleting it is too destructive... and some other form work
   switch ($form_id) {
     case 'media_wysiwyg_format_form':
@@ -256,7 +258,7 @@ function ucsf_images_form_alter(&$form, &$form_state, $form_id) {
       if (isset ($form['options'])) {
         $form['options']['#title'] = 'Local options';
       }
-      //tracking: I think this is needed due to a bug 
+      //tracking: I think this is needed due to a bug
       if (isset($form['#media']->field_image_position['und']) && isset($form['options']['fields']['field_image_position']['und'])) {
         $form['options']['fields']['field_image_position']['und']['#default_value'] = $form['#media']->field_image_position['und'];
       }
@@ -296,7 +298,7 @@ function ucsf_images_check_container_width($element){
       return false;
     }
        //set the minimum width in case not otherwise known
-     $min_width = 0; 
+     $min_width = 0;
      //if #image_style is set (picture formatter)
      if (isset($element['content']['file']['#image_style'])) {
        //grab the size of the fallback style (picture formatter)
@@ -325,14 +327,14 @@ function ucsf_images_check_container_width($element){
          if (isset($effect['data']['reuse_crop_style'])){
           $crop_style = $effect['data']['reuse_crop_style'];
          }
-       }      
+       }
      }
      //if manualcrop data exists for the image at original_cropped style
      //todo: what happends when we add squares?
      if (isset($crop_style) && $manualcrop = manualcrop_load_crop_selection($element['content']['file']['#file']->uri,$crop_style)) {
        //set the width to manualcrops if smaller
       if ($manualcrop->width < $width){
-        $width = $manualcrop->width;        
+        $width = $manualcrop->width;
       }
      }
 
@@ -351,14 +353,14 @@ function ucsf_images_check_container_width($element){
 function ucsf_images_reorder_view_modes(&$options) {
   // Relabel some options
   //$options['default']['label'] = t('Default (full)');
-   
+
   //order standard options
   $order = ucsf_images_list_view_modes();
 
   //prepare arrays to be swapped
   $original_options = $options;
   $options = array();
-  
+
   //loop over the order array of standard options
   foreach ($order as $view_mode) {
     //if the option exists as listed
