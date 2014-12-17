@@ -1,3 +1,9 @@
+7.x-2.5
+-------
+* bug fix to image container class names
+* fix some confusing terminology
+* max out title length for image credit --REQUIRES REVERT
+
 7.x-2.4
 -------
 * resolve issue where invisible h2 can cause weird page phantom page margins
