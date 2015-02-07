@@ -108,6 +108,9 @@ function ucsf_images_preprocess_image(&$variables) {
   if (substr($variables['path'], 0, strlen($base_url)) == $base_url) {
       $variables['path'] = substr($variables['path'], strlen($base_url));
   }
+  // height & width attributes are unnecassary and removed by some themes and not others and this promotes use of css and consistency
+  unset($variables['height']);
+  unset($variables['width']);
 }
 
 /**
