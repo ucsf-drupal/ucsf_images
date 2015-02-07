@@ -1,3 +1,7 @@
+7.x-2.6
+-------
+* removed unnecessary image width and height attributes
+
 7.x-2.5
 -------
 * bug fix to image container class names
