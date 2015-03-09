@@ -1,3 +1,7 @@
+7.x-2.7
+-------
+* Picture and Media module compatibility updates
+
 7.x-2.6
 -------
 * removed unnecessary image width and height attributes
