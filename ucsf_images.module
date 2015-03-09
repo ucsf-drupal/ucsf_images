@@ -120,8 +120,8 @@ function ucsf_images_preprocess_picture_source(&$variables) {
   //dpm(array('ucsf_images_preprocess_picture_source' => $variables));
   //remove the $base URL from lead so things stay happy across domains and HTTP(s)
   global $base_url;
-  if (substr($variables['src'], 0, strlen($base_url)) == $base_url) {
-      $variables['src'] = substr($variables['src'], strlen($base_url));
+  if (substr($variables['srcset'], 0, strlen($base_url)) == $base_url) {
+      $variables['srcset'] = substr($variables['srcset'], strlen($base_url));
   }
 }
 
@@ -134,10 +134,20 @@ function ucsf_images_preprocess_picture(&$variables) {
   //uset attributes that cause validation errors with picture module
   //amazingly, alt still gets added in right places
   //media_token_to_markup seems to pass more stuff in than normal file handling
-  unset($variables['attributes']['height']);
-  unset($variables['attributes']['width']);
-  unset($variables['attributes']['alt']);
+  unset($variables['height']);
+  unset($variables['width']);
+  unset($variables['alt']);
 
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for theme_image_formatter().
+ */
+function ucsf_images_preprocess_image_formatter(&$variables) {
+  unset($variables['item']['width']);
+  unset($variables['item']['height']);
+  unset($variables['item']['attributes']['width']);
+  unset($variables['item']['attributes']['height']);
 }
 
 /*
@@ -219,8 +229,10 @@ function ucsf_images_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
     }
   }
 
+
   if (isset($element['content']['file']['#theme'])) {
-    if ($element['content']['file']['#theme'] == 'image_style' || $element['content']['file']['#theme'] == 'image_style') {
+    // remove width/height from file after theme_image_formatter() has been applied.
+    if ($element['content']['file']['#theme'] == 'image_formatter') {
         unset($element['content']['file']['#attributes']['height']);
         unset($element['content']['file']['#attributes']['width']);
     }
@@ -261,9 +273,15 @@ function ucsf_images_form_alter(&$form, &$form_state, $form_id) {
       if (isset ($form['options'])) {
         $form['options']['#title'] = 'Local options';
       }
-      //tracking: I think this is needed due to a bug
-      if (isset($form['#media']->field_image_position['und']) && isset($form['options']['fields']['field_image_position']['und'])) {
-        $form['options']['fields']['field_image_position']['und']['#default_value'] = $form['#media']->field_image_position['und'];
+      // KLUDGE!
+      // Media's "local overrides" to file entity fields do not stick out of the box.
+      // Henceforth we peel the field value out of the "preview" attribute
+      // of the $form array, and set the form field's default value to it.
+      // TODO: file this as an issue with Media module on d.o [ST 2015/03/06]
+      if (isset($form['preview']['#file']->field_image_position['und'])
+        && isset($form['options']['fields']['field_image_position']['und'])) {
+        $form['options']['fields']['field_image_position']['und']['#default_value']
+          = $form['preview']['#file']->field_image_position['und'];
       }
 
       break;
@@ -333,7 +351,7 @@ function ucsf_images_check_container_width($element){
        }
      }
      //if manualcrop data exists for the image at original_cropped style
-     //todo: what happends when we add squares?
+     //todo: what happens when we add squares?
      if (isset($crop_style) && $manualcrop = manualcrop_load_crop_selection($element['content']['file']['#file']->uri,$crop_style)) {
        //set the width to manualcrops if smaller
       if ($manualcrop->width < $width){
