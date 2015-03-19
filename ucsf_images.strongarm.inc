@@ -412,6 +412,26 @@ function ucsf_images_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'manualcrop_file_entity_settings_image';
+  $strongarm->value = array(
+    'manualcrop_enable' => 1,
+    'manualcrop_keyboard' => 1,
+    'manualcrop_thumblist' => 0,
+    'manualcrop_inline_crop' => 0,
+    'manualcrop_crop_info' => 1,
+    'manualcrop_instant_preview' => 1,
+    'manualcrop_instant_crop' => 0,
+    'manualcrop_default_crop_area' => 1,
+    'manualcrop_maximize_default_crop_area' => 0,
+    'manualcrop_styles_mode' => 'include',
+    'manualcrop_styles_list' => array(),
+    'manualcrop_require_cropping' => array(),
+  );
+  $export['manualcrop_file_entity_settings_image'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'media_wysiwyg_view_mode_image_file_wysiwyg_view_mode';
   $strongarm->value = 'wysiwyg';
   $export['media_wysiwyg_view_mode_image_file_wysiwyg_view_mode'] = $strongarm;
