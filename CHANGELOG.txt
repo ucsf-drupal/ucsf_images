@@ -1,32 +1,36 @@
+7.x-2.8
+-------
+- Added manualcrop file entity settings
+
 7.x-2.7
 -------
-* Picture and Media module compatibility updates
+- Picture and Media module compatibility updates
 
 7.x-2.6
 -------
-* removed unnecessary image width and height attributes
+- removed unnecessary image width and height attributes
 
 7.x-2.5
 -------
-* bug fix to image container class names
-* fix some confusing terminology
-* max out title length for image credit --REQUIRES REVERT
+- bug fix to image container class names
+- fix some confusing terminology
+- max out title length for image credit --REQUIRES REVERT
 
 7.x-2.4
 -------
-* resolve issue where invisible h2 can cause weird page phantom page margins
-* set video captions to always be weight 1 one more-resolves caption above preview image --REQUIRES REVERT
+- resolve issue where invisible h2 can cause weird page phantom page margins
+- set video captions to always be weight 1 one more-resolves caption above preview image --REQUIRES REVERT
 
 
 7.x-2.3
 -------
-* ucsf images changes so that squares and field images have a max-width on their container
-* ucsf_images fix for stropos() warning
-* add support for gallery landing to css in ucsf)images
-* missing IMG on images def for ucsf_images (images inside cntainrs)
-* ucsf_images module, added new class to array for box-sizing
-* add a class to ucsf_images for video preview support overlay thingys
-* fix weight inconsistency for UCSF_IMAGES
+- ucsf images changes so that squares and field images have a max-width on their container
+- ucsf_images fix for stropos() warning
+- add support for gallery landing to css in ucsf)images
+- missing IMG on images def for ucsf_images (images inside cntainrs)
+- ucsf_images module, added new class to array for box-sizing
+- add a class to ucsf_images for video preview support overlay thingys
+- fix weight inconsistency for UCSF_IMAGES
 
 7.x-2.0-beta6
 -------------
