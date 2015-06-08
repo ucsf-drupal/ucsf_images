@@ -135,6 +135,18 @@ function ucsf_images_preprocess_picture(&$variables) {
 
 }
 
+/**
+ * Implements hook_preprocess_HOOK() for theme_image_srcset().
+ */
+function ucsf_images_preprocess_image_srcset(&$variables){
+    //make sure there is just one, not sue what happens with multiples (or if that exists)
+    if (isset($variables['srcset']['0']['uri']) && count($variables['srcset'] === 1)){
+        //set src to be like the URI
+        //helps with FB slurping and possible some old browsers
+        $variables['attributes']['src'] = $variables['srcset']['0']['uri'];
+    }
+}
+
 /*
  * implementation of hook_preprocess_file_entity 
  */
