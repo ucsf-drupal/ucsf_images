@@ -129,11 +129,9 @@ function ucsf_images_preprocess_picture(&$variables) {
   //dpm(array('ucsf_images_preprocess_picture' => $variables));
 
   //uset attributes that cause validation errors with picture module
-  //amazingly, alt still gets added in right places
   //media_token_to_markup seems to pass more stuff in than normal file handling
   unset($variables['attributes']['height']);
   unset($variables['attributes']['width']);
-  unset($variables['attributes']['alt']);
 
 }
 
