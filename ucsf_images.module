@@ -132,14 +132,12 @@ function ucsf_images_preprocess_picture(&$variables) {
   //dpm(array('ucsf_images_preprocess_picture' => $variables));
 
   //uset attributes that cause validation errors with picture module
-  //amazingly, alt still gets added in right places
   //media_token_to_markup seems to pass more stuff in than normal file handling
   unset($variables['height']);
   unset($variables['width']);
-  unset($variables['alt']);
-
+  unset($variables['attributes']['height']);
+  unset($variables['attributes']['width']);
 }
-
 /**
  * Implements hook_preprocess_HOOK() for theme_image_formatter().
  */
@@ -148,6 +146,18 @@ function ucsf_images_preprocess_image_formatter(&$variables) {
   unset($variables['item']['height']);
   unset($variables['item']['attributes']['width']);
   unset($variables['item']['attributes']['height']);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for theme_image_srcset().
+ */
+function ucsf_images_preprocess_image_srcset(&$variables){
+    //make sure there is just one, not sue what happens with multiples (or if that exists)
+    if (isset($variables['srcset']['0']['uri']) && count($variables['srcset'] === 1)){
+        //set src to be like the URI
+        //helps with FB slurping and possible some old browsers
+        $variables['attributes']['src'] = $variables['srcset']['0']['uri'];
+    }
 }
 
 /*
