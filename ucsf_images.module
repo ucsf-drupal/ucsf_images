@@ -135,8 +135,6 @@ function ucsf_images_preprocess_picture(&$variables) {
   //media_token_to_markup seems to pass more stuff in than normal file handling
   unset($variables['height']);
   unset($variables['width']);
-  unset($variables['attributes']['height']);
-  unset($variables['attributes']['width']);
 }
 /**
  * Implements hook_preprocess_HOOK() for theme_image_formatter().
