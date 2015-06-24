@@ -1,3 +1,7 @@
+7.x-2.9
+-------
+- Adjustments to new Picture markup
+
 7.x-2.8
 -------
 - Added manualcrop file entity settings
