@@ -42,7 +42,7 @@ function ucsf_images_entity_view_mode_info() {
   $view_modes['file']['media_full']['label'] = 'Full';
   $view_modes['file']['half']['label'] = 'Half';
   $view_modes['file']['original_cropped']['label'] = 'Original w/Custom Crop';
-  $view_modes['file']['media_original']['label'] = 'Raw Original';
+  $view_modes['file']['media_original']['label'] = 'Original';
   $view_modes['file']['quarter']['label'] = 'Quarter';
   $view_modes['file']['three_quarters']['label'] = 'Three Quarters';
   $view_modes['file']['sixth']['label'] = 'Sixth';
